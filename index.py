@@ -1,15 +1,101 @@
 from tkinter import *
+from tkinter import messagebox
+from dashboard import *
 
-root = Tk()
-root.title("Stock Management System")
 
-l = Label(root, text = "Stock Management System")
-l.config(font = ("Times New Roman", 30))
+# closes the login window on logging with correct credentials
+def login_win_close():
+    root.destroy()
 
-usr_name = Label(root,text ="Username").place(x = 560, y = 260)
-pwd = Label(root,text ="Password").place(x = 560, y = 330)
-e1 = Entry(root).place(x=630, y = 250, width = 190, height = 30)
-e2 = Entry(root).place(x=630, y = 320,  width = 190, height = 30)
 
-l.pack()
-root.mainloop()
+# function to authenticate the login credentials details with enter key
+def enter_key_cred_match(event):
+    uname = username_verify.get()
+    passwd = password_verify.get()
+
+    if uname == "admin" and passwd == "admin":
+        messagebox.showinfo("", "Login Success")
+        login_win_close()
+        main_win()
+    elif uname == "" and passwd == "":
+        messagebox.showinfo("", "Cannot be kept empty")
+    elif uname == "":
+        messagebox.showinfo("", "Username cannot be kept empty")
+    elif passwd == "":
+        messagebox.showinfo("", "Password cannot be kept empty")
+    else:
+        messagebox.showinfo("", "Credentials do not match ")
+
+
+# function to authenticate the login credentials details with login button
+def button_cred_match():
+    uname = username_verify.get()
+    passwd = password_verify.get()
+
+    if uname == "admin" and passwd == "admin":
+        messagebox.showinfo("", "Login Success")
+        login_win_close()
+        main_win()
+    elif uname == "" and passwd == "":
+        messagebox.showinfo("", "Cannot be kept empty")
+    elif uname == "":
+        messagebox.showinfo("", "Username cannot be kept empty")
+    elif passwd == "":
+        messagebox.showinfo("", "Password cannot be kept empty")
+    else:
+        messagebox.showinfo("", "Credentials do not match ")
+
+
+def main_screen():
+    global root
+    root = Tk()
+    root.title("EasyInv System")
+    root.geometry('1920x1080')
+
+    root.iconbitmap('D:\sem project\icon_pack\ico\Database-Upload.ico')
+
+    root.configure(bg="white")
+    # creates a login frame
+    login_frame = Frame(root, width=410, height=280, highlightbackground="#e7e7e7", bg="#e7e7e7")
+    login_frame.place(x=750, y=200)
+
+    # heading of project
+    title = Label(login_frame, text="EasyInv System")
+    title.config(font=("Times New Roman", 15), bg="#e7e7e7")
+    title.place(x=140, y=30)
+
+    global usr_name
+    global pwd
+    global username_login_entry
+    global password_login_entry
+    global username_verify
+    global password_verify
+
+    username_verify = StringVar()
+    password_verify = StringVar()
+
+    # username login and entry box
+    usr_name = Label(login_frame, text="Username*", bg="#e7e7e7").place(x=75, y=80)
+    username_login_entry = Entry(login_frame, textvariable=username_verify, bg="#c4c4c4", bd=0).place(x=80, y=100,
+                                                                                                      width=250,
+                                                                                                      height=30)
+
+    # password login and entry box
+    pwd = Label(login_frame, text="Password*", bg="#e7e7e7").place(x=75, y=140)
+    password_login_entry = Entry(login_frame, textvariable=password_verify, show="*", bg="#c4c4c4", bd=0).place(x=80, y=160, width=250, height=30)
+
+    # login button
+    login_btn = Button(login_frame, text="Log in", command=button_cred_match, bg="#202020", fg="white", bd=0)
+    login_btn.place(x=160, y=220, width=90, height=35)
+
+    # binds the enter key to enter_key_cred_match'function to authenticate the credentials
+    root.bind('<Return>', enter_key_cred_match)
+
+    copyright_text = Label(root, text="© 2021 EasyInv System. All Rights Reserved", bg="white")
+    copyright_text.place(x=840, y=490)
+
+    root.state('zoomed')
+    root.mainloop()
+
+
+main_screen()  # call the main login screen
