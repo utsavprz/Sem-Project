@@ -27,13 +27,13 @@ def get_selected_row(event):
         searchPd = list1.curselection()[0]
         pd =list1.get(searchPd)
         name_supp.delete(0,END)
-        name_supp.insert(END,pd[0])
+        name_supp.insert(END,pd[1])
 
         pan_supp.delete(0, END)
-        pan_supp.insert(END,pd[1])
+        pan_supp.insert(END,pd[2])
 
         contact_supp.delete(0, END)
-        contact_supp.insert(END,pd[2])
+        contact_supp.insert(END,pd[3])
 
     except IndexError:
         pass
@@ -49,6 +49,18 @@ def delete_command():
     backend.delete(pd[0])
     clear_command()
     showINProductList()
+
+#function to search the info from database
+def search_command():
+    list1.delete(0, END)
+    for row in backend.search(supplier_name.get(), pan_no.get(), contact_no.get()):
+        list1.insert(END, row)
+
+#function to update the information
+def update_command():
+    backend.update(pd[0], supplier_name.get(), pan_no.get(), contact_no.get())
+    list1.delete(0, END)
+    list1.insert(END, (pd[0], supplier_name.get(), pan_no.get(), contact_no.get()))
 
 # supplier category main frame
 def supplier_frame():
@@ -74,9 +86,13 @@ def supp_db_frame():
     manage_supplier_frame.place(x=25, y=160)
 
 
-    show_btn = Button(manage_supplier_frame, text="Show Data", bd=0, bg="#202020", fg="#ffffff", font=('Roboto', 9, 'bold'),command=showINProductList)
+    show_btn = Button(manage_supplier_frame, text="Show Data", bd=0, bg="#1A2C42", fg="#ffffff", font=('Roboto', 9, 'bold'),command=showINProductList)
     show_btn.place(x=30, y=80, width="453", height="40")
 
+
+    delete_btn = Button(manage_supplier_frame, text="Delete", bd=0, bg="#1A2C42", fg="#ffffff", font=('Roboto', 9, 'bold'),command=delete_command)
+    delete_btn.place(x=30, y=705, width="453", height="40")
+    #delete_btn.bind("<Delete>", delete_command)
 
     supp_list = Label(manage_supplier_frame, text='Supplier List', font=('Roboto Slab', 17, 'bold'),
                             fg="#4E5154", bg="#ffffff")
@@ -85,7 +101,7 @@ def supp_db_frame():
 
 
     global list1
-    list1 = Listbox(manage_supplier_frame, height=29, width=50, font=("Roboto",12,'bold'))
+    list1 = Listbox(manage_supplier_frame, height=28, width=50, font=("Roboto",12,'bold'))
 
     #show the selected row from list in the entry field
     list1.bind('<<ListboxSelect>>',get_selected_row)
@@ -136,22 +152,16 @@ def edit_supplier_db():
     add_btn = Button(edit_frame, text="Add Supplier", bd=0, bg='#1A2C42', fg='#ffffff', font=('Roboto', 9, 'bold'), command=add_command)
     add_btn.place(x=160, y=300, width="110", height="40")
 
-    update_btn = Button(edit_frame, text="Update", bd=0, bg="#202020", fg="#ffffff", font=('Roboto', 9, 'bold'))
-    update_btn.place(x=300, y=300, width="110", height="40")
+    update_btn = Button(edit_frame, text="Update", bd=0, bg="#1A2C42", fg="#ffffff", font=('Roboto', 9, 'bold'),command=update_command)
+    update_btn.place(x=290, y=300, width="110", height="40")
 
-    delete_btn = Button(edit_frame, text="Delete", bd=0, bg="#202020", fg="#ffffff", font=('Roboto', 9, 'bold'),command=delete_command)
-    delete_btn.place(x=560, y=300, width="110", height="40")
-    #delete_btn.bind("<Delete>", delete_command)
+    clear_btn = Button(edit_frame, text="Clear", bd=0, bg="#1A2C42", fg="#ffffff", font=('Roboto', 9, 'bold'),command=clear_command)
+    clear_btn.place(x=420, y=300, width="110", height="40")
 
-    clear_btn = Button(edit_frame, text="Clear", bd=0, bg="#202020", fg="#ffffff", font=('Roboto', 9, 'bold'),command=clear_command)
-    clear_btn.place(x=430, y=300, width="110", height="40")
-
+    search_btn = Button(edit_frame, text="Search", bd=0, bg="#1A2C42", fg="#ffffff", font=('Roboto', 9, 'bold'),command=search_command)
+    search_btn.place(x=550, y=300, width="110", height="40")
 
 
-
-supplier_frame()
-supp_db_frame()
-edit_supplier_db()
 
 dashboard_root.state('zoomed')
 dashboard_root.mainloop()

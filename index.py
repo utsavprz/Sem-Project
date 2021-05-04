@@ -18,13 +18,13 @@ def enter_key_cred_match(event):
         login_win_close()
         main_win()
     elif uname == "" and passwd == "":
-        messagebox.showinfo("", "Cannot be kept empty")
+        messagebox.showinfo("EasyInv", "Cannot be kept empty")
     elif uname == "":
-        messagebox.showinfo("", "Username cannot be kept empty")
+        messagebox.showinfo("EasyInv", "Username cannot be kept empty")
     elif passwd == "":
-        messagebox.showinfo("", "Password cannot be kept empty")
+        messagebox.showinfo("EasyInv", "Password cannot be kept empty")
     else:
-        messagebox.showinfo("", "Credentials do not match ")
+        messagebox.showinfo("EasyInv", "Credentials do not match ")
 
 
 # function to authenticate the login credentials details with login button
@@ -33,17 +33,17 @@ def button_cred_match():
     passwd = password_verify.get()
 
     if uname == "admin" and passwd == "admin":
-        messagebox.showinfo("", "Login Success")
+        messagebox.showinfo("EasyInv", "Login Success")
         login_win_close()
         main_win()
     elif uname == "" and passwd == "":
-        messagebox.showinfo("", "Cannot be kept empty")
+        messagebox.showinfo("EasyInv", "Cannot be kept empty")
     elif uname == "":
-        messagebox.showinfo("", "Username cannot be kept empty")
+        messagebox.showinfo("EasyInv", "Username cannot be kept empty")
     elif passwd == "":
-        messagebox.showinfo("", "Password cannot be kept empty")
+        messagebox.showinfo("EasyInv", "Password cannot be kept empty")
     else:
-        messagebox.showinfo("", "Credentials do not match ")
+        messagebox.showinfo("EasyInv", "Credentials do not match ")
 
 
 def main_screen():
