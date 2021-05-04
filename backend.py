@@ -13,7 +13,7 @@ def supp_dbect():
 def insert(name,pan,contact):
     supp_db = sqlite3.connect("suppliers.db")
     cur = supp_db.cursor()
-    cur.execute("INSERT INTO Firm VALUES(NULL,?,?,?,?)",(name,pan,contact))
+    cur.execute("INSERT INTO Firm VALUES(NULL,?,?,?)",(name,pan,contact))
     supp_db.commit()
     supp_db.close()
 
@@ -28,7 +28,7 @@ def view():
 def search(name="",pan="",contact=""):
     supp_db = sqlite3.connect("suppliers.db")
     cur = supp_db.cursor()
-    cur.execute("SELECT * FROM Firm WHERE name=? OR pan=? OR contact=? OR isbn=?",(name,pan,contact))
+    cur.execute("SELECT * FROM Firm WHERE name=? OR pan=? OR contact=?",(name,pan,contact))
     rows=cur.fetchall()
     supp_db.close()
     return rows
