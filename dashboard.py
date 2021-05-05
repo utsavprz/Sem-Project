@@ -383,7 +383,7 @@ def main_win():
     category_buttons()
     dashboard_root.resizable(False,False)
     dashboard_root.mainloop()
-main_win()
+
 
 
 
