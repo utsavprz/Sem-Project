@@ -4,8 +4,9 @@ import backend
 global dashboard_root
 dashboard_root = Tk()
 dashboard_root.title('EasyInv System - Suppliers')
-dashboard_root.geometry("1920x1080")
+dashboard_root.geometry("1366x768")
 
+"""
 # function to add the user data into the database
 def add_command():
     backend.insert(supplier_name.get(),pan_no.get(),contact_no.get())
@@ -61,22 +62,22 @@ def update_command():
     backend.update(pd[0], supplier_name.get(), pan_no.get(), contact_no.get())
     list1.delete(0, END)
     list1.insert(END, (pd[0], supplier_name.get(), pan_no.get(), contact_no.get()))
-
+"""
 # supplier category main frame
 def supplier_frame():
     global supplier_category_content_frame
 
     supplier_category_content_frame = Frame(dashboard_root, width=1670, height=1080, bg="#EAEEF4")
-    supplier_category_content_frame.place(x=250, y=0)
+    supplier_category_content_frame.grid(padx=0, pady=0,ipadx=0,ipady=0)
 
     supplier_label = Label(supplier_category_content_frame, text='Suppliers', font=('Roboto Slab', 18, 'bold'),
                            fg="#4E5154", bg="#EAEEF4")
-    supplier_label.place(x=20, y=50)
+    supplier_label.grid()
 
     horizontal_bar = Frame(supplier_category_content_frame, width=1620, height=5, bg='#202020')
-    horizontal_bar.place(x=25, y=100)
+    horizontal_bar.grid(padx=0, pady=60)
 
-
+"""""
 # frame to display database of suppliers
 def supp_db_frame():
     global manage_supplier_frame
@@ -86,11 +87,11 @@ def supp_db_frame():
     manage_supplier_frame.place(x=25, y=160)
 
 
-    show_btn = Button(manage_supplier_frame, text="Show Data", bd=0, bg="#1A2C42", fg="#ffffff", font=('Roboto', 9, 'bold'),command=showINProductList)
+    show_btn = Button(manage_supplier_frame, text="Show Data", bd=0, bg="#1A2C42", fg="#ffffff", font=('Roboto', 9, 'bold'))
     show_btn.place(x=30, y=80, width="453", height="40")
 
 
-    delete_btn = Button(manage_supplier_frame, text="Delete", bd=0, bg="#1A2C42", fg="#ffffff", font=('Roboto', 9, 'bold'),command=delete_command)
+    delete_btn = Button(manage_supplier_frame, text="Delete", bd=0, bg="#1A2C42", fg="#ffffff", font=('Roboto', 9, 'bold'))
     delete_btn.place(x=30, y=705, width="453", height="40")
     #delete_btn.bind("<Delete>", delete_command)
 
@@ -104,7 +105,7 @@ def supp_db_frame():
     list1 = Listbox(manage_supplier_frame, height=28, width=50, font=("Roboto",12,'bold'))
 
     #show the selected row from list in the entry field
-    list1.bind('<<ListboxSelect>>',get_selected_row)
+
 
     list1.place(x=30, y=130)
 
@@ -149,19 +150,21 @@ def edit_supplier_db():
                          font=('Roboto', 9, 'normal'))
     contact_supp.place(x=350, y=195, width="290", height="35")
 
-    add_btn = Button(edit_frame, text="Add Supplier", bd=0, bg='#1A2C42', fg='#ffffff', font=('Roboto', 9, 'bold'), command=add_command)
+    add_btn = Button(edit_frame, text="Add Supplier", bd=0, bg='#1A2C42', fg='#ffffff', font=('Roboto', 9, 'bold'))
     add_btn.place(x=160, y=300, width="110", height="40")
 
-    update_btn = Button(edit_frame, text="Update", bd=0, bg="#1A2C42", fg="#ffffff", font=('Roboto', 9, 'bold'),command=update_command)
+    update_btn = Button(edit_frame, text="Update", bd=0, bg="#1A2C42", fg="#ffffff", font=('Roboto', 9, 'bold'))
     update_btn.place(x=290, y=300, width="110", height="40")
 
-    clear_btn = Button(edit_frame, text="Clear", bd=0, bg="#1A2C42", fg="#ffffff", font=('Roboto', 9, 'bold'),command=clear_command)
+    clear_btn = Button(edit_frame, text="Clear", bd=0, bg="#1A2C42", fg="#ffffff", font=('Roboto', 9, 'bold'))
     clear_btn.place(x=420, y=300, width="110", height="40")
 
-    search_btn = Button(edit_frame, text="Search", bd=0, bg="#1A2C42", fg="#ffffff", font=('Roboto', 9, 'bold'),command=search_command)
+    search_btn = Button(edit_frame, text="Search", bd=0, bg="#1A2C42", fg="#ffffff", font=('Roboto', 9, 'bold'))
     search_btn.place(x=550, y=300, width="110", height="40")
+"""
 
+supplier_frame()
+#supp_db_frame()
+#edit_supplier_db()
 
-
-dashboard_root.state('zoomed')
 dashboard_root.mainloop()

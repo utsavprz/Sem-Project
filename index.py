@@ -50,14 +50,14 @@ def main_screen():
     global root
     root = Tk()
     root.title("EasyInv System")
-    root.geometry('1920x1080')
+    root.geometry('1366x768')
 
     root.iconbitmap('D:\sem project\icon_pack\ico\Database-Upload.ico')
 
     root.configure(bg="white")
     # creates a login frame
     login_frame = Frame(root, width=410, height=280, highlightbackground="#e7e7e7", bg="#e7e7e7")
-    login_frame.place(x=750, y=200)
+    login_frame.grid(padx=500, pady=150)
 
     # heading of project
     title = Label(login_frame, text="EasyInv System")
@@ -92,9 +92,9 @@ def main_screen():
     root.bind('<Return>', enter_key_cred_match)
 
     copyright_text = Label(root, text="© 2021 EasyInv System. All Rights Reserved", bg="white")
-    copyright_text.place(x=840, y=490)
+    copyright_text.place(x=585, y=450)
 
-    root.state('zoomed')
+    root.resizable(False,False)
     root.mainloop()
 
 
