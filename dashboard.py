@@ -3,7 +3,6 @@ import backend
 import product_backend
 
 
-
 def supplier_frame():
     # function to add the user data into the database
     def add_command():
@@ -67,12 +66,6 @@ def supplier_frame():
         supplier_category_content_frame = Frame(dashboard_root, width=1366, height=728, bg="#EAEEF4")
         supplier_category_content_frame.place(x=230, y=40)
 
-        #supplier_label = Label(supplier_category_content_frame, text='Suppliers', font=('Roboto Slab', 15, 'bold'),
-                               #fg="#4E5154", bg="#EAEEF4")
-       # supplier_label.place(x=10, y=15)
-
-       # horizontal_bar = Frame(supplier_category_content_frame, width=1050, height=5, bg='#202020')
-        #horizontal_bar.place(x=25, y=55)
 
     # frame to display database of suppliers
     def supp_db_frame():
@@ -164,6 +157,7 @@ def supplier_frame():
     supp_db_frame()
     edit_supplier_db()
 
+
 def product_frame():
     # function to add the user data into the database
     def add_command():
@@ -233,7 +227,6 @@ def product_frame():
         product_category_content_frame = Frame(dashboard_root, width=1366, height=728, bg="#EAEEF4")
         product_category_content_frame.place(x=230, y=40)
 
-
     # frame to display database of suppliers
     def product_db_frame():
         global manage_product_frame
@@ -251,7 +244,7 @@ def product_frame():
         delete_btn.place(x=20, y=583, width="410", height="40")
         # delete_btn.bind("<Delete>", delete_command)
 
-        prod_list = Label(manage_product_frame, text='Product List', font=('Roboto Slab', 15, 'bold'),
+        prod_list = Label(manage_product_frame, text='Stock Inventory', font=('Roboto Slab', 15, 'bold'),
                           fg="#4E5154", bg="#EAEEF4")
         prod_list.place(x=15, y=10)
 
@@ -340,6 +333,7 @@ def product_frame():
     product_db_frame()
     edit_product_db()
 
+
 def category_main_frame():
     global category_frame
 
@@ -352,7 +346,7 @@ def category_main_frame():
 
     title_label = Label(title_frame, text="EasyInv", font=("Helvetica", 13, 'bold'), bg="#ECAF44",
                         fg="#0C1115")
-    title_label.place(x=80, y=8)
+    title_label.place(x=70, y=8)
 
     # creates a frame to display the content of categories
     category_content_frame = Frame(dashboard_root, width=1366, height=768, bg="#EAEEF4")
@@ -361,34 +355,24 @@ def category_main_frame():
 
 def category_buttons():
     supplier_btn = Button(category_frame, text='Suppliers', fg='#9BA9AF', bg='#0C1115', bd=0,
-                          font=("TechnicBoldRegular", 11,"bold"), command=supplier_frame)
+                          font=("TechnicBoldRegular", 11, "bold"), command=supplier_frame)
 
     supplier_btn.place(x=-50, y=50, width=300, height=50)
 
     product_btn = Button(category_frame, text='Products', fg='#9BA9AF', bg='#0C1115', bd=0,
-                          font=("TechnicBoldRegular", 11,"bold"), command=product_frame)
+                         font=("TechnicBoldRegular", 11, "bold"), command=product_frame)
 
     product_btn.place(x=-50, y=105, width=300, height=50)
-
-
 
 
 def main_win():
     global dashboard_root
     dashboard_root = Tk()
-    dashboard_root.title('EasyInv System - Dashboard')
+    dashboard_root.title('EasyInv - Dashboard')
     dashboard_root.geometry("1366x768")
+    dashboard_root.iconbitmap('D:\sem project\icon_pack\ico\Database-Upload.ico')
 
     category_main_frame()
     category_buttons()
-    dashboard_root.resizable(False,False)
+    dashboard_root.resizable(False, False)
     dashboard_root.mainloop()
-
-
-
-
-
-
-
-
-

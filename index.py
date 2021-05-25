@@ -9,7 +9,7 @@ def login_win_close():
 
 
 # function to authenticate the login credentials details with enter key
-def enter_key_cred_match(event):
+def enter_key_cred_match():
     uname = username_verify.get()
     passwd = password_verify.get()
 
@@ -51,9 +51,7 @@ def main_screen():
     root = Tk()
     root.title("EasyInv System")
     root.geometry('1366x768')
-
     root.iconbitmap('D:\sem project\icon_pack\ico\Database-Upload.ico')
-
     root.configure(bg="white")
     # creates a login frame
     login_frame = Frame(root, width=410, height=280, highlightbackground="#e7e7e7", bg="#e7e7e7")
