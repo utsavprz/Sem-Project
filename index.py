@@ -2,12 +2,10 @@ from tkinter import *
 from tkinter import messagebox
 from dashboard import *
 
-
-
 def usrname_on_entry_click(event):
     """function that gets called whenever entry is clicked"""
     if username_login_entry.get() == 'Username':
-       username_login_entry.config(fg = '#ffffff', highlightbackground="#6DDBA0", highlightthickness=1)
+       username_login_entry.config(fg = '#ffffff')
        username_login_entry.delete(0, "end") # delete all the text in the entry
        username_login_entry.insert(0, '') #Insert blank for user input
 def usrname_on_focusout(event):
@@ -20,7 +18,7 @@ def password_on_entry_click(event):
     if password_login_entry.get() == 'Password':
        password_login_entry.delete(0, "end") # delete all the text in the entry
        password_login_entry.insert(0, '') #Insert blank for user input
-       password_login_entry.config(fg = '#ffffff', highlightbackground="#6DDBA0", highlightthickness=1)
+       password_login_entry.config(fg = '#ffffff')
 def password_on_focusout(event):
     if password_login_entry.get() == '':
         password_login_entry.insert(0, 'Password')
@@ -32,7 +30,7 @@ def enter_key_cred_match(self):
     passwd = password_verify.get()
 
     if uname == "admin" and passwd == "admin":
-        messagebox.showinfo("", "Login Success")
+        #messagebox.showinfo("EasyInv", "Login Success")
         root.destroy()
         main_win()
     elif uname == "" and passwd == "":
@@ -43,15 +41,13 @@ def enter_key_cred_match(self):
         messagebox.showinfo("EasyInv", "Password cannot be kept empty")
     else:
         messagebox.showinfo("EasyInv", "Credentials do not match ")
-
-
 # function to authenticate the login credentials details with login button
 def button_cred_match():
     uname = username_verify.get()
     passwd = password_verify.get()
 
     if uname == "admin" and passwd == "admin":
-        messagebox.showinfo("EasyInv", "Login Success")
+        # messagebox.showinfo("EasyInv", "Login Success")
         root.destroy()
         main_win()
     elif uname == "" and passwd == "":
@@ -67,14 +63,14 @@ def button_cred_match():
 def main_screen():
     global root
     root = Tk()
-    root.title("EasyInv System")
 
-    app_width = 1366
-    app_height = 768
-    root.geometry(f"{app_width}x{app_height}")
+    root.title("EasyInv")
+    root.geometry("1366x768")
+    root.resizable(0,0)
+    root.configure(bg="#25333C")
 
     root.iconbitmap('D:\sem project\icon_pack\ico\Database-Upload.ico')
-    root.configure(bg="#25333C")
+
     # creates a login frame
     login_frame = Frame(root, width=1000, height=550, highlightbackground="#e7e7e7", bg="#25333C")
     login_frame.place(x=200,y=100)
@@ -127,6 +123,6 @@ def main_screen():
     copyright_text = Label(login_frame, text="© 2021 EasyInv System. All Rights Reserved", bg="#25333C",fg="#49535B")
     copyright_text.place(x=585, y=350)
 
-    root.resizable(False,False)
     root.mainloop()
+
 main_screen()  # call the main login screen

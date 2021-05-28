@@ -9,17 +9,16 @@ def supp_dbect():
     supp_db = sqlite3.connect("products.db")
     cur = supp_db.cursor()
     cur.execute("CREATE TABLE IF NOT EXISTS ProductItem(id INTEGER PRIMARY KEY,name text,price integer,quantity integer,supplier text)")
-    #date_add = "ALTER TABLE ProductItem ADD COLUMN date integer"
-    #cur.execute(date_add)
+    #cur.execute("ALTER TABLE ProductItem ADD totalAmount integer")
     supp_db.commit()
     supp_db.close()
 
 
 # Inserting Datas
-def insert(name, price, quantity, supplier, date):
+def insert(date, name, price, quantity, supplier,totalAmount):
     supp_db = sqlite3.connect("products.db")
     cur = supp_db.cursor()
-    cur.execute("INSERT INTO ProductItem VALUES(NULL,?,?,?,?,?)", (name, price, quantity, supplier, date))
+    cur.execute("INSERT INTO ProductItem VALUES(NULL,?,?,?,?,?,?)", (date,name, price, quantity, supplier, totalAmount))
     supp_db.commit()
     supp_db.close()
 
@@ -33,11 +32,10 @@ def view():
     return rows
 
 
-def search(name="", price="", quantity="", supplier="", date=""):
+def search(date ="", name="", price="", quantity="", supplier="",totalAmount=""):
     supp_db = sqlite3.connect("products.db")
     cur = supp_db.cursor()
-    cur.execute("SELECT * FROM ProductItem WHERE name=? OR price=? OR quantity=? OR supplier=? OR date=?",
-                (name, price, quantity, supplier,date))
+    cur.execute("SELECT * FROM ProductItem WHERE date=? OR name=? OR price=? OR quantity=? OR supplier=? OR totalAmount=?",(date,name, price, quantity, supplier,totalAmount))
     rows = cur.fetchall()
     supp_db.close()
     return rows
@@ -51,13 +49,33 @@ def delete(id):
     supp_db.close()
 
 
-def update(id, name, price, quantity, supplier,date):
+def update(id, date, name, price, quantity, supplier,totalAmount):
     supp_db = sqlite3.connect("products.db")
     cur = supp_db.cursor()
-    cur.execute("UPDATE ProductItem SET name=?,price=?,quantity=?,supplier=?,date=? WHERE id=?",
-                (name, price, quantity, supplier,date, id))
+    cur.execute("UPDATE ProductItem SET date=?,name=?,price=?,quantity=?,supplier=?,totalAmount=? WHERE id=?",
+                (date, name, price, quantity, supplier, totalAmount, id))
     supp_db.commit()
     supp_db.close()
 
+def count_products():
+    supp_db = sqlite3.connect("products.db")
+    cur = supp_db.cursor()
+    count_prod =cur.execute("SELECT COUNT(DISTINCT name) FROM ProductItem")
+    count_num = count_prod.fetchall()
+    for num in count_num:
+        print(num[0])
+    supp_db.commit()
+    supp_db.close()
+
+def purchase_amount():
+    supp_db = sqlite3.connect("products.db")
+    cur = supp_db.cursor()
+    sum = cur.execute("SELECT name, sum(totalAmount) FROM ProductItem")
+    total = sum.fetchall()
+    for x in total:
+        print(x)
+    supp_db.commit()
+    supp_db.close()
 
 supp_dbect()
+
