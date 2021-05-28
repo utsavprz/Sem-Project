@@ -3,6 +3,7 @@ import backend
 import product_backend
 
 
+
 def supplier_frame():
     # function to add the user data into the database
     def add_command():
@@ -161,9 +162,9 @@ def supplier_frame():
 def product_frame():
     # function to add the user data into the database
     def add_command():
-        product_backend.insert(prodName.get(), prodPrice.get(), prodQuan.get(), ProdSupp.get())
+        product_backend.insert(prodName.get(), prodPrice.get(), prodQuan.get(), prodSupp.get(), prodDate.get())
         list2.delete(0, END)
-        list2.insert(END, prodName.get(), prodPrice.get(), prodQuan.get(), ProdSupp.get())
+        list2.insert(END, prodName.get(), prodPrice.get(), prodQuan.get(), prodSupp.get(), prodDate.get())
 
         showINProductList()  # called showINProductList method after inserting the data record to database
 
@@ -192,6 +193,9 @@ def product_frame():
             supp_prod.delete(0, END)
             supp_prod.insert(END, pd[4])
 
+            date_prod.delete(0,END)
+            date_prod.insert(END,pd[5])
+
         except IndexError:
             pass
 
@@ -201,6 +205,7 @@ def product_frame():
         price_prod.delete(0, END)
         quantity_prod.delete(0, END)
         supp_prod.delete(0, END)
+        date_prod.delete(0,END)
 
     # function to delete the data from database
     def delete_command():
@@ -211,14 +216,14 @@ def product_frame():
     # function to search the info from database
     def search_command():
         list2.delete(0, END)
-        for row in product_backend.search(prodName.get(), prodPrice.get(), prodQuan.get(), ProdSupp.get()):
+        for row in product_backend.search(prodName.get(), prodPrice.get(), prodQuan.get(), prodSupp.get(), prodDate.get()):
             list2.insert(END, row)
 
     # function to update the information
     def update_command():
-        product_backend.update(pd[0], prodName.get(), prodPrice.get(), prodQuan.get(), ProdSupp.get())
+        product_backend.update(pd[0], prodName.get(), prodPrice.get(), prodQuan.get(), prodSupp.get(), prodDate.get())
         list2.delete(0, END)
-        list2.insert(END, (pd[0], prodName.get(), prodPrice.get(), prodQuan.get(), ProdSupp.get()))
+        list2.insert(END, (pd[0], prodName.get(), prodPrice.get(), prodQuan.get(), prodSupp.get(), prodDate.get()))
 
     # supplier category main frame
     def product_frame():
@@ -268,17 +273,28 @@ def product_frame():
         global prodName
         global prodPrice
         global prodQuan
-        global ProdSupp
+        global prodSupp
+        global prodDate
 
         global name_prod
         global price_prod
         global quantity_prod
         global supp_prod
+        global date_prod
 
         prodName = StringVar()
         prodPrice = StringVar()
         prodQuan = StringVar()
-        ProdSupp = StringVar()
+        prodSupp = StringVar()
+        prodDate = StringVar()
+
+        date_label = Label(product_edit_frame, text="Date", font=("Roboto",10,'bold'), bg='#EAEEF4', fg="#202020")
+        date_label.place(x=390, y=15)
+
+        date_prod = Entry(product_edit_frame, bd=0, highlightbackground="#757575", highlightthickness=1,
+                          textvariable=prodDate,
+                          font=('Roboto', 9, 'normal'))
+        date_prod.place(x=465, y=5, width="115", height="35")
 
         name_label = Label(product_edit_frame, text="Product Name", font=("Roboto", 10, 'bold'), bg='#EAEEF4',
                            fg="#202020")
@@ -306,7 +322,7 @@ def product_frame():
         supp_label = Label(product_edit_frame, text="Supplier", font=("Roboto", 10, 'bold'), bg='#EAEEF4', fg="#202020")
         supp_label.place(x=100, y=270)
         supp_prod = Entry(product_edit_frame, bd=0, highlightbackground="#757575", highlightthickness=1,
-                          textvariable=ProdSupp,
+                          textvariable=prodSupp,
                           font=('Roboto', 9, 'normal'))
         supp_prod.place(x=290, y=260, width="290", height="35")
 
@@ -376,3 +392,4 @@ def main_win():
     category_buttons()
     dashboard_root.resizable(False, False)
     dashboard_root.mainloop()
+
