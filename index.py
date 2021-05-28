@@ -18,11 +18,11 @@ def password_on_entry_click(event):
     if password_login_entry.get() == 'Password':
        password_login_entry.delete(0, "end") # delete all the text in the entry
        password_login_entry.insert(0, '') #Insert blank for user input
-       password_login_entry.config(fg = '#ffffff')
+       password_login_entry.config(fg = '#ffffff',show="*")
 def password_on_focusout(event):
     if password_login_entry.get() == '':
         password_login_entry.insert(0, 'Password')
-        password_login_entry.config(fg = '#ffffff')
+        password_login_entry.config(fg = '#ffffff',show="*")
 
 # function to authenticate the login credentials details with enter key
 def enter_key_cred_match(self):

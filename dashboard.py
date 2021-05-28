@@ -491,5 +491,3 @@ def main_win():
     category_main_frame()
     dashboard()
     dashboard_root.mainloop()
-
-main_win()
