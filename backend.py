@@ -55,5 +55,15 @@ def update(id, name, pan, contact):
     supp_db.commit()
     supp_db.close()
 
+def count_suppliers():
+    supp_db = sqlite3.connect("suppliers.db")
+    cur =supp_db.cursor()
+    count_supp = cur.execute("SELECT COUNT(DISTINCT name) FROM Firm")
+    count_num = count_supp.fetchall()
+    for num in count_num:
+        return num
+    supp_db.commit()
+    supp_db.close()
+
 
 supp_dbect()

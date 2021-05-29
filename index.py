@@ -2,28 +2,6 @@ from tkinter import *
 from tkinter import messagebox
 from dashboard import *
 
-def usrname_on_entry_click(event):
-    """function that gets called whenever entry is clicked"""
-    if username_login_entry.get() == 'Username':
-       username_login_entry.config(fg = '#ffffff')
-       username_login_entry.delete(0, "end") # delete all the text in the entry
-       username_login_entry.insert(0, '') #Insert blank for user input
-def usrname_on_focusout(event):
-    if username_login_entry.get() == '':
-        username_login_entry.insert(0, 'Username')
-        username_login_entry.config(fg = '#ffffff')
-
-def password_on_entry_click(event):
-    """function that gets called whenever entry is clicked"""
-    if password_login_entry.get() == 'Password':
-       password_login_entry.delete(0, "end") # delete all the text in the entry
-       password_login_entry.insert(0, '') #Insert blank for user input
-       password_login_entry.config(fg = '#ffffff',show="*")
-def password_on_focusout(event):
-    if password_login_entry.get() == '':
-        password_login_entry.insert(0, 'Password')
-        password_login_entry.config(fg = '#ffffff',show="*")
-
 # function to authenticate the login credentials details with enter key
 def enter_key_cred_match(self):
     uname = username_verify.get()
@@ -59,6 +37,27 @@ def button_cred_match():
     else:
         messagebox.showinfo("EasyInv", "Credentials do not match ")
 
+def usrname_on_entry_click(event):
+    """function that gets called whenever entry is clicked"""
+    if username_login_entry.get() == 'Username':
+       username_login_entry.config(fg = '#ffffff')
+       username_login_entry.delete(0, "end") # delete all the text in the entry
+       username_login_entry.insert(0, '') #Insert blank for user input
+def usrname_on_focusout(event):
+    if username_login_entry.get() == '':
+        username_login_entry.insert(0, 'Username')
+        username_login_entry.config(fg = '#ffffff')
+
+def password_on_entry_click(event):
+    """function that gets called whenever entry is clicked"""
+    if password_login_entry.get() == 'Password':
+       password_login_entry.delete(0, "end") # delete all the text in the entry
+       password_login_entry.insert(0, '') #Insert blank for user input
+       password_login_entry.config(fg = '#ffffff',show="*")
+def password_on_focusout(event):
+    if password_login_entry.get() == '':
+        password_login_entry.insert(0, 'Password')
+        password_login_entry.config(fg = '#ffffff',show="*")
 
 def main_screen():
     global root
@@ -92,7 +91,6 @@ def main_screen():
     vertical_seperator.place(x=460, y=135)
 
     # username login and entry box
-    # usr_name = Label(login_frame, text="Username*", bg="#25333C").place(x=75, y=80)
     username_login_entry = Entry(login_frame, textvariable=username_verify, highlightbackground="#6DDBA0", highlightthickness=1, bg="#25333C", fg="#ffffff", bd=0)
     username_login_entry.place(x=580, y=150, width=250,height=39)
 
@@ -101,10 +99,7 @@ def main_screen():
     username_login_entry.bind('<FocusOut>', usrname_on_focusout)
     username_login_entry.config(fg="grey")
 
-
-
     # password login and entry box
-    # pwd = Label(login_frame, text="Password*", bg="#25333C").place(x=75, y=140)
     password_login_entry = Entry(login_frame, textvariable=password_verify, highlightbackground="#6DDBA0", highlightthickness=1, bg="#25333C", fg="#ffffff", bd=0)
     password_login_entry.place(x=580, y=210, width=250, height=39)
 
