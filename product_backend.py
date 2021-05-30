@@ -41,6 +41,7 @@ def search(date ="", name="", price="", quantity="", supplier="",totalAmount="")
     return rows
 
 
+
 def delete(id):
     prod_db = sqlite3.connect("products.db")
     cur = prod_db.cursor()
@@ -81,6 +82,7 @@ def purchase_amount():
 
 
 prod_dbect()
+search()
 
 
 

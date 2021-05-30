@@ -12,14 +12,16 @@ def enter_key_cred_match(self):
         #messagebox.showinfo("EasyInv", "Login Success")
         root.destroy()
         main_win()
-    elif uname == "" and passwd == "":
-        messagebox.showinfo("EasyInv", "Cannot be kept empty")
-    elif uname == "":
-        messagebox.showinfo("EasyInv", "Username cannot be kept empty")
-    elif passwd == "":
-        messagebox.showinfo("EasyInv", "Password cannot be kept empty")
+    elif uname == "Username" and passwd == "Password":
+        # messagebox.showinfo("EasyInv", "Cannot be kept empty")
+        emptyLabel = Label(login_frame, text="Enter Username and Password to login", bg="#25333C",fg="red")
+        emptyLabel.place(x=850, y=290)
+        emptyLabel.after(3000,lambda: emptyLabel.destroy())
     else:
-        messagebox.showinfo("EasyInv", "Credentials do not match ")
+        # messagebox.showinfo("EasyInv", "Credentials do not match ")
+        notmatchEmptyLabel = Label(login_frame, text="❌ Credentials do not match", bg="#25333C",fg="red")
+        notmatchEmptyLabel.place(x=850, y=295)
+        notmatchEmptyLabel.after(3000,lambda: notmatchEmptyLabel.destroy())
 
 
 # function to authenticate the login credentials details with login button
@@ -31,46 +33,52 @@ def button_cred_match():
         # messagebox.showinfo("EasyInv", "Login Success")
         root.destroy()
         main_win()
-    elif uname == "" and passwd == "":
-        messagebox.showinfo("EasyInv", "Cannot be kept empty")
-    elif uname == "":
-        messagebox.showinfo("EasyInv", "Username cannot be kept empty")
-    elif passwd == "":
-        messagebox.showinfo("EasyInv", "Password cannot be kept empty")
+    elif uname == "Username" and passwd == "Password":
+        # messagebox.showinfo("EasyInv", "Cannot be kept empty")
+        emptyLabel = Label(login_frame, text="Enter credentials to login", bg="#25333C",fg="red")
+        emptyLabel.place(x=850, y=290)
+        emptyLabel.after(3000,lambda: emptyLabel.destroy())
+
     else:
-        messagebox.showinfo("EasyInv", "Credentials do not match ")
+        # messagebox.showinfo("EasyInv", "Credentials do not match ")
+        notmatchEmptyLabel = Label(login_frame, text="❌ Credentials do not match", bg="#25333C",fg="red")
+        notmatchEmptyLabel.place(x=850, y=295)
+        notmatchEmptyLabel.after(3000,lambda: notmatchEmptyLabel.destroy())
 
 
 def usrname_on_entry_click(event):
-    """function that gets called whenever entry is clicked"""
+    """function that gets called whenever username entry is clicked"""
     if username_login_entry.get() == 'Username':
-       username_login_entry.config(fg = '#ffffff')
        username_login_entry.delete(0, "end") # delete all the text in the entry
        username_login_entry.insert(0, '') #Insert blank for user input
+       username_login_entry.config(fg = '#ffffff')
 
 
 def usrname_on_focusout(event):
     if username_login_entry.get() == '':
         username_login_entry.insert(0, 'Username')
-        username_login_entry.config(fg = '#ffffff')
+        username_login_entry.config(fg = 'grey')
 
 
 def password_on_entry_click(event):
-    """function that gets called whenever entry is clicked"""
+    """function that gets called whenever password entry is clicked"""
     if password_login_entry.get() == 'Password':
        password_login_entry.delete(0, "end") # delete all the text in the entry
        password_login_entry.insert(0, '') #Insert blank for user input
-       password_login_entry.config(fg = '#ffffff',show="*")
+       password_login_entry.config(fg = '#ffffff')
+    else:
+        password_login_entry.config(show="*")
 
 
 def password_on_focusout(event):
     if password_login_entry.get() == '':
         password_login_entry.insert(0, 'Password')
-        password_login_entry.config(fg = '#ffffff',show="*")
+        password_login_entry.config(fg = 'grey')
 
 
 def main_screen():
     global root
+    global login_frame
     root = Tk()
 
     root.title("EasyInv")
@@ -81,7 +89,7 @@ def main_screen():
     root.iconbitmap('D:\sem project\icon_pack\ico\Database-Upload.ico')
 
     # creates a login frame
-    login_frame = Frame(root, width=1000, height=550, highlightbackground="#e7e7e7", bg="#25333C")
+    login_frame = Frame(root, width=1300, height=550,bg="#25333C")
     login_frame.place(x=200,y=100)
 
     global usr_name
@@ -123,7 +131,7 @@ def main_screen():
     login_btn.place(x=580, y=285, width=250, height=39)
 
     # binds the enter key to enter_key_cred_match'function to authenticate the credentials
-    root.bind('<Return>', enter_key_cred_match)
+    root.bind('<Return>',enter_key_cred_match)
 
     copyright_text = Label(login_frame, text="© 2021 EasyInv System. All Rights Reserved", bg="#25333C",fg="#49535B")
     copyright_text.place(x=585, y=350)
