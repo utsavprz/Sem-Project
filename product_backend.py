@@ -57,6 +57,7 @@ def update(id, date, name, price, quantity, supplier,totalAmount):
     prod_db.commit()
     prod_db.close()
 
+
 def count_products():
     prod_db = sqlite3.connect("products.db")
     cur = prod_db.cursor()
@@ -66,6 +67,7 @@ def count_products():
         return num
     prod_db.commit()
     prod_db.close()
+
 
 def purchase_amount():
     prod_db = sqlite3.connect("products.db")
@@ -77,7 +79,10 @@ def purchase_amount():
     prod_db.commit()
     prod_db.close()
 
+
 prod_dbect()
+
+
 
 
 

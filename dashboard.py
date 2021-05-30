@@ -56,6 +56,7 @@ def category_main_frame():
     prod_label.image = prod_photo
     prod_label.place(x=40, y=188)
 
+
 def dashboard():
     # creates a frame to display the content of categories
     dashboard_frame = Frame(dashboard_root, width=1366, height=768, bg="#EAEEF4")
@@ -96,6 +97,7 @@ def dashboard():
 
     totalProdReport_frame = Frame(miniReport_frame, width=260, height=130, bg="#FEFFFE",highlightthickness=2,highlightbackground='#C8CCD9')
     totalProdReport_frame.place(x=850, y=5)
+
 
 def supplier_frame():
     # function to add the user data into the database
@@ -175,16 +177,13 @@ def supplier_frame():
         supplier_dbTable.insert("", END, values=(id, supplier_name.get(), pan_no.get(), contact_no.get()))
         display_supp_data()
 
-    def supplier_frame():
+    # frame to display database of suppliers
+    def supp_db_frame():
+        global manage_supplier_frame
         global supplier_category_content_frame
 
         supplier_category_content_frame = Frame(dashboard_root, width=1366, height=728, bg="#EAEEF4")
         supplier_category_content_frame.place(x=200, y=50)
-
-    # frame to display database of suppliers
-    def supp_db_frame():
-        global manage_supplier_frame
-        global s1
 
         manage_supplier_frame = Frame(supplier_category_content_frame, width=1120, height=780, bg='#EAEEF4')
         manage_supplier_frame.place(x=5, y=15)
@@ -272,10 +271,10 @@ def supplier_frame():
         supplier_dbTable.place(x=10,y=10)
         supplier_dbTable.bind('<Double-1>', get_selected_row)
 
-    supplier_frame()
     supp_db_frame()
     edit_supplier_db()
     display_supp_data()
+
 
 def product_frame():
     # function to add the user data into the database
@@ -326,8 +325,8 @@ def product_frame():
                 quantity_prod.delete(0, 'end')
                 quantity_prod.insert(END, quantityofProduct)
 
-                supp_prod.delete(0, 'end')
-                supp_prod.insert(END, supplierofProduct)
+                defaultForSuppDropdown()
+                prodSupp.set(supplierofProduct)
 
                 total_prod.delete(0, 'end')
                 total_prod.insert(END, totalamtofProduct)
@@ -342,7 +341,7 @@ def product_frame():
         name_prod.delete(0, END)
         price_prod.delete(0, END)
         quantity_prod.delete(0, END)
-        supp_prod.delete(0, END)
+        defaultForSuppDropdown()
         total_prod.delete(0, END)
 
     # function to delete the data from database
@@ -376,24 +375,22 @@ def product_frame():
         if total_prod.get() == "":
             total_prod.insert(0, tot)
             total_prod.config(fg='black')
-            print(type(tot))
 
     def onclick_focusout(event):
         if total_prod.get() == '':
             total_prod.insert(0, tot)
             total_prod.config(fg='black')
 
-    # supplier category main frame
-    def product_frame():
-        global product_category_content_frame
-
-        product_category_content_frame = Frame(dashboard_root, width=1366, height=728, bg="#EAEEF4")
-        product_category_content_frame.place(x=200, y=60)
+    def defaultForSuppDropdown():
+        prodSupp.set("Select Supplier")
 
     # frame to display database of suppliers
     def product_db_frame():
         global manage_product_frame
-        global s1
+        global product_category_content_frame
+
+        product_category_content_frame = Frame(dashboard_root, width=1366, height=728, bg="#EAEEF4")
+        product_category_content_frame.place(x=200, y=60)
 
         manage_product_frame = Frame(product_category_content_frame, width=1120, height=780, bg='#EAEEF4')
         manage_product_frame.place(x=5, y=5)
@@ -466,10 +463,13 @@ def product_frame():
 
         supp_label = Label(product_edit_frame, text="Supplier", font=("Roboto", 10, 'bold'), bg='#EAEEF4', fg="#202020")
         supp_label.place(x=600, y=80)
-        supp_prod = Entry(product_edit_frame, bd=0, highlightbackground="#757575", highlightthickness=1,
-                          textvariable=prodSupp,
-                          font=('Roboto', 9, 'normal'))
-        supp_prod.place(x=795, y=80, width="290", height="35")
+        prodSupp = StringVar()
+        defaultForSuppDropdown()
+        list_supplier=backend.list_supplier()
+        supp_dropdown=OptionMenu(product_edit_frame,prodSupp,*list_supplier)
+        supp_dropdown.configure(bg="white", bd=0, highlightbackground="#757575", highlightthickness=1)
+        supp_dropdown.place(x=795 ,y=80,width=290,height=35)
+
 
         total_amt_label = Label(product_edit_frame, text="Total Amount", font=("Roboto", 10, 'bold'), bg='#EAEEF4',
                                 fg="#202020")
@@ -527,7 +527,6 @@ def product_frame():
         product_dbTable.place(x=10,y=10)
         product_dbTable.bind('<Double-1>', get_selected_row)
 
-    product_frame()
     product_db_frame()
     edit_product_db()
     display_prod_data()
@@ -543,6 +542,9 @@ def main_win():
 
     category_main_frame()
     dashboard()
+
     dashboard_root.mainloop()
+
 main_win()
+
 

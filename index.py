@@ -2,6 +2,7 @@ from tkinter import *
 from tkinter import messagebox
 from dashboard import *
 
+
 # function to authenticate the login credentials details with enter key
 def enter_key_cred_match(self):
     uname = username_verify.get()
@@ -19,6 +20,8 @@ def enter_key_cred_match(self):
         messagebox.showinfo("EasyInv", "Password cannot be kept empty")
     else:
         messagebox.showinfo("EasyInv", "Credentials do not match ")
+
+
 # function to authenticate the login credentials details with login button
 def button_cred_match():
     uname = username_verify.get()
@@ -37,16 +40,20 @@ def button_cred_match():
     else:
         messagebox.showinfo("EasyInv", "Credentials do not match ")
 
+
 def usrname_on_entry_click(event):
     """function that gets called whenever entry is clicked"""
     if username_login_entry.get() == 'Username':
        username_login_entry.config(fg = '#ffffff')
        username_login_entry.delete(0, "end") # delete all the text in the entry
        username_login_entry.insert(0, '') #Insert blank for user input
+
+
 def usrname_on_focusout(event):
     if username_login_entry.get() == '':
         username_login_entry.insert(0, 'Username')
         username_login_entry.config(fg = '#ffffff')
+
 
 def password_on_entry_click(event):
     """function that gets called whenever entry is clicked"""
@@ -54,10 +61,13 @@ def password_on_entry_click(event):
        password_login_entry.delete(0, "end") # delete all the text in the entry
        password_login_entry.insert(0, '') #Insert blank for user input
        password_login_entry.config(fg = '#ffffff',show="*")
+
+
 def password_on_focusout(event):
     if password_login_entry.get() == '':
         password_login_entry.insert(0, 'Password')
         password_login_entry.config(fg = '#ffffff',show="*")
+
 
 def main_screen():
     global root
@@ -85,7 +95,7 @@ def main_screen():
     password_verify = StringVar()
 
     logo = PhotoImage(file ='D:\sem project\logo\easyinv_concept.png')
-    Label(login_frame,image = logo,bd=0).place(x=100, y=180)
+    Label(login_frame, image=logo, bd=0).place(x=100, y=180)
 
     vertical_seperator = Frame(login_frame, width=1, height=220, bg='#49535B')
     vertical_seperator.place(x=460, y=135)
@@ -120,4 +130,7 @@ def main_screen():
 
     root.mainloop()
 
+
 main_screen()  # call the main login screen
+
+
