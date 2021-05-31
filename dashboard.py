@@ -1,10 +1,13 @@
 from tkinter import *
 import backend
 import product_backend
+import recentActivity_backend
 from PIL import ImageTk, Image
 from tkinter import ttk
 from tkcalendar import DateEntry
+import time
 import datetime
+
 
 def category_main_frame():
     global category_frame
@@ -32,7 +35,7 @@ def category_main_frame():
     # logout.place(x=400,y=0)
 
     dashboard_btn = Button(category_frame, text='Dashboard', fg='#EAEEF4', bg='#051620', bd=0,
-                           font=("Helvetica", 10, "bold"), command=dashboard)
+                           font=("Helvetica", 10, "bold"), command=dashboard, cursor="hand2")
 
     dashboard_btn.place(x=-45, y=60, width=300, height=50)
     # Setting up image for dashboard
@@ -45,7 +48,7 @@ def category_main_frame():
 
 
     supplier_btn = Button(category_frame, text='Suppliers', fg='#EAEEF4', bg='#051620', bd=0,
-                          font=("Helvetica", 10, "bold"), command=supplier_frame)
+                          font=("Helvetica", 10, "bold"), command=supplier_frame, cursor="hand2")
     supplier_btn.place(x=-50, y=115, width=300, height=50)
     # Setting up image for suppliers
     supp_image = Image.open("D:\sem project\icon_pack\supplier.png")
@@ -56,7 +59,7 @@ def category_main_frame():
     supp_label.place(x=40, y=133)
 
     product_btn = Button(category_frame, text='Products', fg='#EAEEF4', bg='#051620', bd=0,
-                         font=("Helvetica", 10, "bold"), command=product_frame)
+                         font=("Helvetica", 10, "bold"), command=product_frame, cursor="hand2")
     product_btn.place(x=-50, y=170, width=300, height=50)
     # Setting up image for products
     prod_image = Image.open("D:\sem project\icon_pack\product.png")
@@ -70,12 +73,25 @@ def category_main_frame():
     style = ttk.Style()
     style.theme_use("default")
     style.configure("Treeview", rowheight=25)
-    style.configure("Treeview.Heading",background="#25333C",foreground="#ffffff",font=('Helvetica', 9, 'bold'),relief="flat")
-
-
-
+    style.configure("Treeview.Heading",background="#25333C",foreground="#ffffff", font=('Helvetica', 9, 'bold'), relief="flat")
 
 def dashboard():
+    global recentActivityData
+
+    def clear_table():
+        global recentActivityTable
+        for records in recentActivityTable.get_children():
+            recentActivityTable.delete(records)
+
+    def delete_activity():
+        clear_table()
+        recentActivity_backend.delete()
+
+    def recentActivityData():
+        clear_table()
+        for rows in recentActivity_backend.view():
+            recentActivityTable.insert("", END, values=rows)
+
     global dashboard_frame
     # creates a frame to display the content of categories
     dashboard_frame = Frame(dashboard_root, width=1366, height=768, bg="#EAEEF4")
@@ -138,16 +154,79 @@ def dashboard():
                         bg='#FEFFFE', fg='#4E5154')
     info_label3.place(x=20, y=90)
 
+    # Report for product with highest price
+    prodWithHighestPriceReport = product_backend.expensiveProd()
+
+    prodWithHighestPriceTable = ttk.Treeview(dashboard_frame, column=('column1'), show='headings', height=2)
+
+    prodWithHighestPriceTable.heading('#1', text="Product with the highest price")
+    prodWithHighestPriceTable.column("#1", width=260, anchor="center")
+    prodWithHighestPriceTable.insert("",END,value=(prodWithHighestPriceReport))
+    prodWithHighestPriceTable.place(x=870,y=285)
+
+    # Report for product with highest stock quantity
+    prodWithQuanReport = product_backend.highestQuanProd()
+    prodWithHighestQuanTable = ttk.Treeview(dashboard_frame, column=('column1'), show='headings', height=2)
+
+    prodWithHighestQuanTable.heading('#1', text="Product with the most stock quantity")
+    prodWithHighestQuanTable.column("#1", width=260, anchor="center")
+    for i in prodWithQuanReport:
+        prodWithHighestQuanTable.insert("",END,value=(i))
+    prodWithHighestQuanTable.place(x=870,y=370)
+
+    # Report for product with least stock quantity
+    prodWithQuanReport2 = product_backend.leastQuanProd()
+    prodWithleastQuanTable = ttk.Treeview(dashboard_frame, column=('column1'), show='headings', height=2)
+
+    prodWithleastQuanTable.heading('#1', text="Product with the least stock quantity")
+    prodWithleastQuanTable.column("#1", width=260, anchor="center")
+    for i in prodWithQuanReport2:
+        prodWithleastQuanTable.insert("",END,value=(i))
+    prodWithleastQuanTable.place(x=870,y=455)
+
+
+    # Recent Activity
+    recentActivityLabel = Label(dashboard_frame, text='Recent Activity', font=('Lato', 15, 'bold'),
+                            fg="#25333C", bg="#EAEEF4")
+    recentActivityLabel.place(x=25, y=230)
+
+    # Button to clear recent activity
+    clearActivitybtn = Button(dashboard_frame, text="Clear", bg="#EAEEF4", fg="grey", bd=0, command=delete_activity,font=("Lato",8,"normal",'underline'), cursor="hand2")
+    clearActivitybtn.place(x=185,y=238)
+    global recentActivityTable
+    recentActivityTable = ttk.Treeview(dashboard_frame, column=(
+        'column1', 'column2', 'column3', 'column4'), show='headings', height=15)
+
+    recentActivityTable.heading('#1', text="Date")
+    recentActivityTable.column("#1", width=120, anchor="center")
+
+    recentActivityTable.heading('#2', text="Time")
+    recentActivityTable.column("#2", width=120, anchor="center")
+
+    recentActivityTable.heading('#3', text="Product / Supplier")
+    recentActivityTable.column("#3", width=300, anchor="center")
+
+    recentActivityTable.heading('#4', text="Action")
+    recentActivityTable.column("#4", width=285, anchor="center")
+
+    recentActivityTable.place(x=25, y=285)
+
+    recentActivityData()
 
 def supplier_frame():
+    time_string = time.strftime('%H:%M:%S')
+    date_sting = f"{datetime.datetime.now(): %a, %b %d %Y}"
+
     # function to add the user data into the database
     def add_command():
         global supplier_dbTable
         global id
         if supplier_name.get() or pan_no.get() or contact_no.get() != "":
-            backend.insert(supplier_name.get().capitalize(), pan_no.get(), contact_no.get())
-            supplier_dbTable.insert("", END, value=(" ", supplier_name.get(), pan_no.get(), contact_no.get()))
             try:
+                backend.insert(supplier_name.get().capitalize(), pan_no.get(), contact_no.get())
+                recentActivity_backend.insert(date_sting,time_string,supplier_name.get(),"Supplier Added")
+                supplier_dbTable.insert("", END, value=(" ", supplier_name.get(), pan_no.get(), contact_no.get()))
+
                 # displays a information status of adding the entry
                 addedLabel = Label(edit_frame, text="Supplier Added Successfully", bg='#EAEEF4', fg="#202020")
                 addedLabel.place(x=5, y=240)
@@ -218,6 +297,7 @@ def supplier_frame():
 
         if id in suppId:
             backend.delete(id)
+            recentActivity_backend.insert(date_sting, time_string, supplier_name.get(), "Supplier Data Deleted")
             # displays a information status of deleting entry
             deletedLabel = Label(edit_frame, text="Data Deleted Successfully", bg='#EAEEF4', fg="#202020")
             deletedLabel.place(x=5, y=240)
@@ -257,13 +337,13 @@ def supplier_frame():
             nothingToSarchLabel.place(x=5, y=240)
             nothingToSarchLabel.after(4000, lambda: nothingToSarchLabel.destroy())  # timer for information
 
-
     # function to update the information
     def update_command():
         global supplier_dbTable
         global id
         try:
             backend.update(id, supplier_name.get().capitalize(), pan_no.get(), contact_no.get())
+            recentActivity_backend.insert(date_sting, time_string, supplier_name.get(), "Supplier Data Updated")
             clear_table()
             supplier_dbTable.insert("", END, values=(id, supplier_name.get(), pan_no.get(), contact_no.get()))
             display_supp_data()
@@ -291,16 +371,16 @@ def supplier_frame():
 
         supp_list = Label(manage_supplier_frame, text='Supplier List', font=('Lato', 20, 'bold'),
                           fg="#25333C", bg="#EAEEF4")
-        supp_list.place(x=15, y=0)
+        supp_list.place(x=20, y=0)
 
     # function to create a frame and do the editing of suppliers
     def edit_supplier_db():
         global edit_frame
         edit_frame = Frame(manage_supplier_frame, width=1200, height=260, bg='#EAEEF4')
-        edit_frame.place(x=10, y=35)
+        edit_frame.place(x=20, y=35)
 
         dbTable_frame = Frame(manage_supplier_frame, width=1200, height=380, bg='#EAEEF4')
-        dbTable_frame.place(x=5, y=305)
+        dbTable_frame.place(x=10, y=305)
 
         global supplier_name
         global pan_no
@@ -335,27 +415,27 @@ def supplier_frame():
         contact_supp.place(x=200, y=130, width="290", height="35")
 
         add_btn = Button(edit_frame, text="Add Supplier", bd=0, bg='#266868', fg='#EAEEF4', font=('Roboto', 9, 'bold'),
-                         command=add_command)
+                         command=add_command, cursor="hand2")
         add_btn.place(x=5, y=190, width="110", height="40")
 
         update_btn = Button(edit_frame, text="Update", bd=0, bg="#266868", fg="#EAEEF4", font=('Roboto', 9, 'bold'),
-                            command=update_command)
+                            command=update_command, cursor="hand2")
         update_btn.place(x=140, y=190, width="110", height="40")
 
         clear_btn = Button(edit_frame, text="Clear", bd=0, bg="#266868", fg="#EAEEF4", font=('Roboto', 9, 'bold'),
-                           command=clear_command)
+                           command=clear_command, cursor="hand2")
         clear_btn.place(x=275, y=190, width="110", height="40")
 
         search_btn = Button(edit_frame, text="Search", bd=0, bg="#266868", fg="#EAEEF4", font=('Roboto', 9, 'bold'),
-                            command=search_command)
+                            command=search_command, cursor="hand2")
         search_btn.place(x=410, y=190, width="110", height="40")
 
         show_btn = Button(edit_frame, text="Show Data", bd=0, bg="#266868", fg="#ffffff",
-                          font=('Roboto', 9, 'bold'), command=display_supp_data)
+                          font=('Roboto', 9, 'bold'), command=display_supp_data, cursor="hand2")
         show_btn.place(x=545, y=190, width="110", height="40")
 
         delete_btn = Button(edit_frame, text="Delete", bd=0, bg="#BB272B", fg="#ffffff",
-                            font=('Roboto', 9, 'bold'), command=delete_command)
+                            font=('Roboto', 9, 'bold'), command=delete_command, cursor="hand2")
         delete_btn.place(x=680, y=190, width="110", height="40")
         # delete_btn.bind("<Delete>", delete_command)
 
@@ -382,8 +462,9 @@ def supplier_frame():
     edit_supplier_db()
     display_supp_data()
 
-
 def product_frame():
+    time_string = time.strftime('%H:%M:%S')
+    date_sting = f"{datetime.datetime.now(): %a, %b %d %Y}"
     # function to add the user data into the database
     def add_command():
         global product_dbTable
@@ -393,6 +474,7 @@ def product_frame():
                                        prodTotal.get())
                 product_dbTable.insert("", END, value=(
                 "", prodDate.get(), prodName.get(), prodPrice.get(), prodQuan.get(), prodSupp.get(), prodTotal.get()))
+                recentActivity_backend.insert(date_sting,time_string,prodName.get(),"Purchase Added")
                 # displays a information status of adding the entry
                 addedLabel = Label(product_edit_frame, text="Purchase Added Successfully", bg='#EAEEF4', fg="#202020")
                 addedLabel.place(x=5, y=240)
@@ -474,6 +556,7 @@ def product_frame():
         if id in idList:
             # print("deleted")
             product_backend.delete(id)
+            recentActivity_backend.insert(date_sting, time_string, prodName.get(), "Purchase Data Deleted")
             # displays a information status of deleting entry
             deletedLabel = Label(product_edit_frame, text="Data Deleted Successfully", bg='#EAEEF4', fg="#202020")
             deletedLabel.place(x=5, y=240)
@@ -516,7 +599,6 @@ def product_frame():
             searchedLabel.place(x=5, y=240)
             searchedLabel.after(4000, lambda: searchedLabel.destroy())  # timer for information
 
-
     # function to update the information
     def update_command():
         global id
@@ -524,12 +606,12 @@ def product_frame():
             product_backend.update(id, prodDate.get(), prodName.get(), prodPrice.get(), prodQuan.get(), prodSupp.get(),
                                    prodTotal.get())
             clear_table()
-            product_dbTable.insert("", END, values=(
-                id, prodDate.get(), prodName.get(), prodPrice.get(), prodQuan.get(), prodSupp.get(), prodTotal.get()))
+            product_dbTable.insert("", END, values=(id, prodDate.get(), prodName.get(), prodPrice.get(), prodQuan.get(), prodSupp.get(), prodTotal.get()))
             # displays a information status of updating entry
             updatedLabel = Label(product_edit_frame, text="Entry Updated Successfully", bg='#EAEEF4', fg="#202020")
             updatedLabel.place(x=5, y=240)
             updatedLabel.after(3000, lambda: updatedLabel.destroy())  # timer for information
+            recentActivity_backend.insert(date_sting, time_string, prodName.get(), "Purchase Data Updated")  # sends activity report to recent activity
         except:
             # displays a information status of updating entry
             notupdatedLabel = Label(product_edit_frame, text="Nothing to update", bg='#EAEEF4', fg="#202020")
@@ -547,7 +629,6 @@ def product_frame():
             total_prod.insert(0, tot)
             total_prod.config(fg='black')
 
-
     def clearTotalAmount_onclickPrice(event):
         if price_prod.get() != '':
             total_prod.delete(0, END)
@@ -560,7 +641,6 @@ def product_frame():
 
     def defaultForSuppDropdown():
         prodSupp.set("")
-
 
     # function to create a frame and do the editing of suppliers
     def edit_product_db():
@@ -575,14 +655,14 @@ def product_frame():
 
         prod_list = Label(manage_product_frame, text='Stock Inventory', font=('Lato', 20, 'bold'),
                           fg="#25333C", bg="#EAEEF4")
-        prod_list.place(x=15, y=0)
+        prod_list.place(x=20, y=0)
 
         global product_edit_frame
         product_edit_frame = Frame(manage_product_frame, width=1200, height=260, bg='#EAEEF4')
-        product_edit_frame.place(x=10, y=35)
+        product_edit_frame.place(x=20, y=35)
 
         dbTable_frame = Frame(manage_product_frame, width=1200, height=410, bg='#EAEEF4')
-        dbTable_frame.place(x=5, y=305)
+        dbTable_frame.place(x=10, y=305)
 
         global prodName
         global prodPrice
@@ -648,7 +728,7 @@ def product_frame():
         # Set the background color of Displayed Options to white
         supp_dropdown["menu"].configure(bg="white")
         # Se the background color of Options Menu to white
-        supp_dropdown.configure(bg="white", bd=0, highlightbackground="#CDCDCD", highlightthickness=1)
+        supp_dropdown.configure(bg="white", bd=0, highlightbackground="#CDCDCD", highlightthickness=1, cursor="hand2")
         supp_dropdown.place(x=795, y=80, width=290, height=35)
 
         total_amt_label = Label(product_edit_frame, text="Total Amount", font=("Roboto", 10, 'bold'), bg='#EAEEF4',
@@ -661,31 +741,32 @@ def product_frame():
         total_prod.bind("<FocusIn>", totalAmtonclick_focusin)
         # total_prod.bind("<FocusOut>", onclick_focusout)
 
+        # Buttons Section
         add_btn = Button(product_edit_frame, text="Add Product", bd=0, bg='#266868', fg='#ffffff',
-                         font=('Roboto', 9, 'bold'), command=add_command)
+                         font=('Roboto', 9, 'bold'), command=add_command, cursor="hand2")
         add_btn.place(x=5, y=190, width="110", height="40")
 
         update_btn = Button(product_edit_frame, text="Update", bd=0, bg="#266868", fg="#ffffff",
                             font=('Roboto', 9, 'bold'),
-                            command=update_command)
+                            command=update_command, cursor="hand2")
         update_btn.place(x=140, y=190, width="110", height="40")
 
         clear_btn = Button(product_edit_frame, text="Clear", bd=0, bg="#266868", fg="#ffffff",
                            font=('Roboto', 9, 'bold'),
-                           command=clear_command)
+                           command=clear_command, cursor="hand2")
         clear_btn.place(x=275, y=190, width="110", height="40")
 
         search_btn = Button(product_edit_frame, text="Search", bd=0, bg="#266868", fg="#ffffff",
                             font=('Roboto', 9, 'bold'),
-                            command=search_command)
+                            command=search_command, cursor="hand2")
         search_btn.place(x=410, y=190, width="110", height="40")
 
         show_btn = Button(product_edit_frame, text="Show Data", bd=0, bg="#266868", fg="#ffffff",
-                          font=('Roboto', 9, 'bold'), command=display_prod_data)
+                          font=('Roboto', 9, 'bold'), command=display_prod_data, cursor="hand2")
         show_btn.place(x=545, y=190, width="110", height="40")
 
         delete_btn = Button(product_edit_frame, text="Delete", bd=0, bg="#BB272B", fg="#ffffff",
-                            font=('Roboto', 9, 'bold'), command=delete_command)
+                            font=('Roboto', 9, 'bold'), command=delete_command, cursor="hand2")
         delete_btn.place(x=680, y=190, width="110", height="40")
         delete_btn.bind("<Delete>", delete_command)
 
@@ -723,6 +804,7 @@ def product_frame():
 
 def main_win():
     global dashboard_root
+    global recentActivityData
     dashboard_root = Tk()
     dashboard_root.resizable(False, False)
     dashboard_root.title('EasyInv - Dashboard')

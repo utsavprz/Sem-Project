@@ -100,6 +100,37 @@ def prod_id_list():
     prod_db.commit()
     prod_db.close()
 
+def expensiveProd():
+    prod_db = sqlite3.connect("products.db")
+    cur = prod_db.cursor()
+    expensiveItem =cur.execute("SELECT name FROM ProductItem WHERE price = (SELECT MAX(price) FROM ProductItem)").fetchall()
+    for num in expensiveItem:
+        return num
+    prod_db.commit()
+    prod_db.close()
+
+def highestQuanProd():
+    prod_db = sqlite3.connect("products.db")
+    cur = prod_db.cursor()
+    highestQuanItem =cur.execute("SELECT name FROM ProductItem WHERE quantity = (SELECT MAX(quantity) FROM ProductItem)").fetchall()
+    Qlist = []
+    for num in highestQuanItem:
+        Qlist.append(num)
+    return Qlist
+    prod_db.commit()
+    prod_db.close()
+
+def leastQuanProd():
+    prod_db = sqlite3.connect("products.db")
+    cur = prod_db.cursor()
+    leastQuanItem =cur.execute("SELECT name FROM ProductItem WHERE quantity = (SELECT MIN(quantity) FROM ProductItem)").fetchall()
+    Qlist2 = []
+    for num in leastQuanItem:
+        Qlist2.append(num)
+    return Qlist2
+    prod_db.commit()
+    prod_db.close()
+
 prod_dbect()
 
 
