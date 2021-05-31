@@ -76,6 +76,17 @@ def list_supplier():
     supp_db.commit()
     supp_db.close()
 
+def supp_id_list():
+    supp_db=sqlite3.connect("suppliers.db")
+    cur = supp_db.cursor()
+    listId = cur.execute("SELECT id FROM Firm").fetchall()
+    iList=[]
+    for listing in listId:
+        iList.append(listing[0])
+    return iList
+    supp_db.commit()
+    supp_db.close()
+
 supp_dbect()
 
 

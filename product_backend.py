@@ -69,6 +69,15 @@ def count_products():
     prod_db.commit()
     prod_db.close()
 
+def count_invoices():
+    prod_db = sqlite3.connect("products.db")
+    cur = prod_db.cursor()
+    count_date =cur.execute("SELECT COUNT(date) FROM ProductItem").fetchall()
+    for num in count_date:
+        return num
+    prod_db.commit()
+    prod_db.close()
+
 
 def purchase_amount():
     prod_db = sqlite3.connect("products.db")
@@ -80,9 +89,18 @@ def purchase_amount():
     prod_db.commit()
     prod_db.close()
 
+def prod_id_list():
+    prod_db = sqlite3.connect("products.db")
+    cur = prod_db.cursor()
+    listId = cur.execute("SELECT id FROM ProductItem").fetchall()
+    iList=[]
+    for listing in listId:
+        iList.append(listing[0])
+    return iList
+    prod_db.commit()
+    prod_db.close()
 
 prod_dbect()
-search()
 
 
 
