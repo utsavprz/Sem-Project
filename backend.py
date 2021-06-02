@@ -1,6 +1,6 @@
 import sqlite3
 
-# backend connection for database of supplier
+# backend connection for database of suppliers
 
 
 # Creating a database
