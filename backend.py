@@ -88,6 +88,3 @@ def supp_id_list():
     supp_db.close()
 
 supp_dbect()
-
-
-
