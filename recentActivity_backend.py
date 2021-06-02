@@ -1,5 +1,5 @@
 import sqlite3
-
+# backend connection for database of Recent activity
 def recAct_dbect():
     recAct_db = sqlite3.connect("recent_activity.db")
     cur = recAct_db.cursor()

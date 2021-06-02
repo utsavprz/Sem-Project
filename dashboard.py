@@ -1,12 +1,13 @@
+import datetime
+import time
 from tkinter import *
+from tkinter import ttk
+
+from PIL import ImageTk, Image
+
 import backend
 import product_backend
 import recentActivity_backend
-from PIL import ImageTk, Image
-from tkinter import ttk
-from tkcalendar import DateEntry
-import time
-import datetime
 
 
 def category_main_frame():
@@ -19,9 +20,12 @@ def category_main_frame():
     # frame for logo
     title_frame = Frame(dashboard_root, bg="#25333C", width=1366, height=50)
     title_frame.place(x=0, y=0)
+
     # Displays the date in title frame
-    datetimeLabel = Label(title_frame,text=f"{datetime.datetime.now():%a, %b %d %Y}", fg ="#ffffff",bg="#25333C",font=("Arial",9,"bold"))
-    datetimeLabel.place(x=1225,y=14)
+    time_string = time.strftime('%H:%M')
+    datetimeLabel = Label(title_frame, text=f"{time_string}  |  {datetime.datetime.now():%a, %b %d %Y}", fg="#ffffff",
+                          bg="#25333C", font=("Arial", 9, "bold"))
+    datetimeLabel.place(x=1180, y=14)
 
     # Setting up logo in the title frame
     logo_image = Image.open("D:\sem project\logo\easyinv_concept.png")
@@ -45,7 +49,6 @@ def category_main_frame():
     dash_label = Label(category_frame, image=dash_photo, bd=0, bg='#28282E')
     dash_label.image = dash_photo
     dash_label.place(x=40, y=78)
-
 
     supplier_btn = Button(category_frame, text='Suppliers', fg='#EAEEF4', bg='#051620', bd=0,
                           font=("Helvetica", 10, "bold"), command=supplier_frame, cursor="hand2")
@@ -73,7 +76,9 @@ def category_main_frame():
     style = ttk.Style()
     style.theme_use("default")
     style.configure("Treeview", rowheight=25)
-    style.configure("Treeview.Heading",background="#25333C",foreground="#ffffff", font=('Helvetica', 9, 'bold'), relief="flat")
+    style.configure("Treeview.Heading", background="#25333C", foreground="#ffffff", font=('Helvetica', 9, 'bold'),
+                    relief="flat")
+
 
 def dashboard():
     global recentActivityData
@@ -101,6 +106,7 @@ def dashboard():
                             fg="#25333C", bg="#EAEEF4")
     dashboard_title.place(x=25, y=15)
 
+    # Mini Product Report 1 Section
     miniReport_frame = Frame(dashboard_frame, width=1150, height=350, bg="#EAEEF4")
     miniReport_frame.place(x=20, y=70)
 
@@ -130,11 +136,12 @@ def dashboard():
 
     # Total Invoices Report
     totalInvoiceReport_frame = Frame(miniReport_frame, width=260, height=130, bg="#FEFFFE", highlightthickness=2,
-                                  highlightbackground='#98D165')
+                                     highlightbackground='#98D165')
     totalInvoiceReport_frame.place(x=570, y=5)
     totalInvoiceReport_data = product_backend.count_invoices()
-    totalInvoiceReport_data = Label(totalInvoiceReport_frame, text=totalInvoiceReport_data, font=('Monosten', 40, 'bold'),
-                                 bg='#FEFFFE', fg='#98D165')
+    totalInvoiceReport_data = Label(totalInvoiceReport_frame, text=totalInvoiceReport_data,
+                                    font=('Monosten', 40, 'bold'),
+                                    bg='#FEFFFE', fg='#98D165')
     totalInvoiceReport_data.place(x=20, y=5)
     info_label2 = Label(totalInvoiceReport_frame, text="Total Invoices", font=('Assistant', 10, 'bold'), bg='#FEFFFE',
                         fg='#4E5154')
@@ -154,45 +161,46 @@ def dashboard():
                         bg='#FEFFFE', fg='#4E5154')
     info_label3.place(x=20, y=90)
 
+    # Mini Product Report 2 Section
     # Report for product with highest price
     prodWithHighestPriceReport = product_backend.expensiveProd()
 
-    prodWithHighestPriceTable = ttk.Treeview(dashboard_frame, column=('column1'), show='headings', height=2)
+    prodWithHighestPriceTable = ttk.Treeview(dashboard_frame, column='column1', show='headings', height=2)
 
     prodWithHighestPriceTable.heading('#1', text="Product with the highest price")
     prodWithHighestPriceTable.column("#1", width=260, anchor="center")
-    prodWithHighestPriceTable.insert("",END,value=(prodWithHighestPriceReport))
-    prodWithHighestPriceTable.place(x=870,y=285)
+    prodWithHighestPriceTable.insert("", END, value=(prodWithHighestPriceReport))
+    prodWithHighestPriceTable.place(x=870, y=285)
 
     # Report for product with highest stock quantity
     prodWithQuanReport = product_backend.highestQuanProd()
-    prodWithHighestQuanTable = ttk.Treeview(dashboard_frame, column=('column1'), show='headings', height=2)
+    prodWithHighestQuanTable = ttk.Treeview(dashboard_frame, column='column1', show='headings', height=5)
 
-    prodWithHighestQuanTable.heading('#1', text="Product with the most stock quantity")
+    prodWithHighestQuanTable.heading('#1', text="Product with the high stock quantity")
     prodWithHighestQuanTable.column("#1", width=260, anchor="center")
     for i in prodWithQuanReport:
-        prodWithHighestQuanTable.insert("",END,value=(i))
-    prodWithHighestQuanTable.place(x=870,y=370)
+        prodWithHighestQuanTable.insert("", END, value=i)
+    prodWithHighestQuanTable.place(x=870, y=375)
 
     # Report for product with least stock quantity
     prodWithQuanReport2 = product_backend.leastQuanProd()
-    prodWithleastQuanTable = ttk.Treeview(dashboard_frame, column=('column1'), show='headings', height=2)
+    prodWithleastQuanTable = ttk.Treeview(dashboard_frame, column='column1', show='headings', height=5)
 
-    prodWithleastQuanTable.heading('#1', text="Product with the least stock quantity")
+    prodWithleastQuanTable.heading('#1', text="Product with the low stock quantity")
     prodWithleastQuanTable.column("#1", width=260, anchor="center")
     for i in prodWithQuanReport2:
-        prodWithleastQuanTable.insert("",END,value=(i))
-    prodWithleastQuanTable.place(x=870,y=455)
-
+        prodWithleastQuanTable.insert("", END, value=i)
+    prodWithleastQuanTable.place(x=870, y=535)
 
     # Recent Activity
     recentActivityLabel = Label(dashboard_frame, text='Recent Activity', font=('Lato', 15, 'bold'),
-                            fg="#25333C", bg="#EAEEF4")
+                                fg="#25333C", bg="#EAEEF4")
     recentActivityLabel.place(x=25, y=230)
 
     # Button to clear recent activity
-    clearActivitybtn = Button(dashboard_frame, text="Clear", bg="#EAEEF4", fg="grey", bd=0, command=delete_activity,font=("Lato",8,"normal",'underline'), cursor="hand2")
-    clearActivitybtn.place(x=185,y=238)
+    clearActivitybtn = Button(dashboard_frame, text="Clear", bg="#EAEEF4", fg="grey", bd=0, command=delete_activity,
+                              font=("Lato", 8, "normal", 'underline'), cursor="hand2")
+    clearActivitybtn.place(x=185, y=238)
     global recentActivityTable
     recentActivityTable = ttk.Treeview(dashboard_frame, column=(
         'column1', 'column2', 'column3', 'column4'), show='headings', height=15)
@@ -213,6 +221,7 @@ def dashboard():
 
     recentActivityData()
 
+
 def supplier_frame():
     time_string = time.strftime('%H:%M:%S')
     date_sting = f"{datetime.datetime.now(): %a, %b %d %Y}"
@@ -224,7 +233,7 @@ def supplier_frame():
         if supplier_name.get() or pan_no.get() or contact_no.get() != "":
             try:
                 backend.insert(supplier_name.get().capitalize(), pan_no.get(), contact_no.get())
-                recentActivity_backend.insert(date_sting,time_string,supplier_name.get(),"Supplier Added")
+                recentActivity_backend.insert(date_sting, time_string, supplier_name.get(), "Supplier Added")
                 supplier_dbTable.insert("", END, value=(" ", supplier_name.get(), pan_no.get(), contact_no.get()))
 
                 # displays a information status of adding the entry
@@ -319,10 +328,10 @@ def supplier_frame():
                 supplier_dbTable.insert("", END, values=rows)
             counting = len(supplier_dbTable.get_children())
 
-            #if counting is more than 1 then it will display plural entry and if counting is equal to 1, it will display singular entry
+            # if counting is more than 1 then it will display plural entry and if counting is equal to 1, it will display singular entry
             entry = ""
-            plural= "Entries"
-            singular="Entry"
+            plural = "Entries"
+            singular = "Entry"
             if counting > 1:
                 entry, plural = plural, entry
             elif counting <= 1:
@@ -462,9 +471,11 @@ def supplier_frame():
     edit_supplier_db()
     display_supp_data()
 
+
 def product_frame():
     time_string = time.strftime('%H:%M:%S')
     date_sting = f"{datetime.datetime.now(): %a, %b %d %Y}"
+
     # function to add the user data into the database
     def add_command():
         global product_dbTable
@@ -473,8 +484,9 @@ def product_frame():
                 product_backend.insert(prodDate.get(), prodName.get(), prodPrice.get(), prodQuan.get(), prodSupp.get(),
                                        prodTotal.get())
                 product_dbTable.insert("", END, value=(
-                "", prodDate.get(), prodName.get(), prodPrice.get(), prodQuan.get(), prodSupp.get(), prodTotal.get()))
-                recentActivity_backend.insert(date_sting,time_string,prodName.get(),"Purchase Added")
+                    "", prodDate.get(), prodName.get(), prodPrice.get(), prodQuan.get(), prodSupp.get(),
+                    prodTotal.get()))
+                recentActivity_backend.insert(date_sting, time_string, prodName.get(), "Purchase Added")
                 # displays a information status of adding the entry
                 addedLabel = Label(product_edit_frame, text="Purchase Added Successfully", bg='#EAEEF4', fg="#202020")
                 addedLabel.place(x=5, y=240)
@@ -564,7 +576,8 @@ def product_frame():
 
         elif id not in idList:
             # print("nothing to delete")
-            nothingTodeleteLabel = Label(product_edit_frame, text="No Data Selected To Delete", bg='#EAEEF4', fg="#202020")
+            nothingTodeleteLabel = Label(product_edit_frame, text="No Data Selected To Delete", bg='#EAEEF4',
+                                         fg="#202020")
             nothingTodeleteLabel.place(x=5, y=240)
             nothingTodeleteLabel.after(3000, lambda: nothingTodeleteLabel.destroy())  # timer for information
 
@@ -586,7 +599,7 @@ def product_frame():
             singular = "Entry"
             if counting > 1:
                 entry, plural = plural, entry
-            elif counting <=1:
+            elif counting <= 1:
                 entry, singular = singular, entry
 
             # displays a information status of adding the entry
@@ -606,12 +619,14 @@ def product_frame():
             product_backend.update(id, prodDate.get(), prodName.get(), prodPrice.get(), prodQuan.get(), prodSupp.get(),
                                    prodTotal.get())
             clear_table()
-            product_dbTable.insert("", END, values=(id, prodDate.get(), prodName.get(), prodPrice.get(), prodQuan.get(), prodSupp.get(), prodTotal.get()))
+            product_dbTable.insert("", END, values=(
+            id, prodDate.get(), prodName.get(), prodPrice.get(), prodQuan.get(), prodSupp.get(), prodTotal.get()))
             # displays a information status of updating entry
             updatedLabel = Label(product_edit_frame, text="Entry Updated Successfully", bg='#EAEEF4', fg="#202020")
             updatedLabel.place(x=5, y=240)
             updatedLabel.after(3000, lambda: updatedLabel.destroy())  # timer for information
-            recentActivity_backend.insert(date_sting, time_string, prodName.get(), "Purchase Data Updated")  # sends activity report to recent activity
+            recentActivity_backend.insert(date_sting, time_string, prodName.get(),
+                                          "Purchase Data Updated")  # sends activity report to recent activity
         except:
             # displays a information status of updating entry
             notupdatedLabel = Label(product_edit_frame, text="Nothing to update", bg='#EAEEF4', fg="#202020")
@@ -688,7 +703,8 @@ def product_frame():
         date_label = Label(product_edit_frame, text="Date", font=("Roboto", 10, 'bold'), bg='#EAEEF4', fg="#202020")
         date_label.place(x=5, y=30)
 
-        date_prod = Entry(product_edit_frame,textvariable=prodDate,font=('Roboto', 9, 'normal'), bd=0, highlightbackground="#CDCDCD", highlightthickness=1)
+        date_prod = Entry(product_edit_frame, textvariable=prodDate, font=('Roboto', 9, 'normal'), bd=0,
+                          highlightbackground="#CDCDCD", highlightthickness=1)
         prodDate.set("")
         date_prod.place(x=200, y=30, width="290", height="35")
 
@@ -706,7 +722,7 @@ def product_frame():
                            textvariable=prodPrice,
                            font=('Roboto', 9, 'normal'))
         price_prod.place(x=200, y=130, width="290", height="35")
-        price_prod.bind("<FocusIn>",clearTotalAmount_onclickPrice)
+        price_prod.bind("<FocusIn>", clearTotalAmount_onclickPrice)
 
         quantity_label = Label(product_edit_frame, text="Quantity", font=("Roboto", 10, 'bold'), bg='#EAEEF4',
                                fg="#202020")
@@ -815,5 +831,3 @@ def main_win():
     dashboard()
 
     dashboard_root.mainloop()
-main_win()
-

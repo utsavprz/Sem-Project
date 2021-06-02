@@ -112,7 +112,7 @@ def expensiveProd():
 def highestQuanProd():
     prod_db = sqlite3.connect("products.db")
     cur = prod_db.cursor()
-    highestQuanItem =cur.execute("SELECT name FROM ProductItem WHERE quantity = (SELECT MAX(quantity) FROM ProductItem)").fetchall()
+    highestQuanItem =cur.execute("SELECT name FROM ProductItem WHERE quantity > 20").fetchall()
     Qlist = []
     for num in highestQuanItem:
         Qlist.append(num)
@@ -123,7 +123,7 @@ def highestQuanProd():
 def leastQuanProd():
     prod_db = sqlite3.connect("products.db")
     cur = prod_db.cursor()
-    leastQuanItem =cur.execute("SELECT name FROM ProductItem WHERE quantity = (SELECT MIN(quantity) FROM ProductItem)").fetchall()
+    leastQuanItem =cur.execute("SELECT name FROM ProductItem WHERE quantity < 15").fetchall()
     Qlist2 = []
     for num in leastQuanItem:
         Qlist2.append(num)
@@ -132,6 +132,7 @@ def leastQuanProd():
     prod_db.close()
 
 prod_dbect()
+leastQuanProd()
 
 
 
