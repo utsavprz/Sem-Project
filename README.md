@@ -7,11 +7,20 @@ Intro
 FEATURES AND FUNCTIONALITIES
 
 o	User friendly interface to keep the stock record.
+
 o	Login page to protect the management of stocks and prevent the misuse of stock information.
+
 o	Easy to store the data of product and supplier into the database.
+
 o	Add, update, search, and delete item details.
+
 o	Recent activity tracking feature along with date and time of the activity.
+
 o	Mini Product Reports on dashboard.
+
 o	Shows the detailed information on purchase details and the remaining stock.
+
 o	Current date and time is displayed in admin dashboard.
+
 o	Easy redirecting to different page
+
